@@ -177,10 +177,18 @@ func GetMatrixWith(i int, j int) ([]int, []int, bool) {
 	ev = "fg"
 	var r []int = make([]int, 0)
 	r = make([]int, 16)
+
+	for j-i>25 {
+		i++
+		j--
+	}
+
 	min := 255 * 2
 	kmin := i
 	lmin := i
 	found := false
+
+
 	for k := i; k < j; k++ {
 		for l := i; l < j; l++ {
 			r = getCurculantMatrix(i, j, k, l)

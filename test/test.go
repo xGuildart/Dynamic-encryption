@@ -7,6 +7,7 @@ import (
 
 func main() {
 	str := "Hello from ADMFactory.comasm"
+	str = "hello From Drarga"
 	fmt.Println("encrypt " + str)
 	enc := encryption.Encrypt(str, "default", "hello hjobhjdgki")
 	fmt.Println("=> " + enc)
@@ -19,13 +20,14 @@ func main() {
 	fmt.Println("decrypt " + enc2)
 	fmt.Println("=> " + encryption.Decrypt(enc2, "special","hello hjobhjdgki"))
 
-
+	str = "hello From Drarga"
 	fmt.Println("encrypt " + str)
-	enc3 := encryption.Encrypt(str, "dynamic", "hello hjobhjdgki")
+	enc3 := encryption.Encrypt(str, "dynamic", "super password K1991#")
 	fmt.Println("=> " + enc3)
 	fmt.Println("decrypt " + enc3)
-	fmt.Println("=> " + encryption.Decrypt(enc3, "dynamic","hello hjobhjdgki"))
-	
+	fmt.Println("=> " + encryption.Decrypt(enc3, "dynamic","super password K1991#"))
+	r,rr,_ := encryption.GetMatrixWith(43,116)
+	fmt.Printf("%d => %d", r, rr)
 	// //fmt.Println(encryption.PrintHexTable(encryption.GenerateTable_x(0x16)))
 
 	// // 6 1    ==> det = -16

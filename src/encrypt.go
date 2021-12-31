@@ -45,6 +45,7 @@ func KeySchedule(str string) [][][]string{
 	
 	dynkey[0] = HexToInt(r[0][0][0])
 	dynkey[1] = HexToInt(r[0][3][3])
+	g_r,g_ri,g_err = GetMatrixWith(dynkey[0], dynkey[1])  
 
 	for i:=1; i<11; i++{
 		var s [][]string = [][]string{
@@ -231,13 +232,9 @@ func HexEncode(str string) string {
 	return fmt.Sprintf("%s", hx)
 }
 
-func HexDecode_(strb []string) string {
-	for i, _ := range strb {
-		x, _ := hex.DecodeString(strb[i])
-		strb[i] = fmt.Sprintf("%s", x)
-	}
-	str := strings.ReplaceAll(strings.Join(strb, ""), "g", "")
-	return str
+func HexDecode_(strb []string) string {	
+	s,_ := hex.DecodeString(strings.Join(strb, ""))
+	return fmt.Sprintf("%s",s)
 }
 
 func rotate(max int, step int, val int) int {
@@ -319,9 +316,7 @@ func mixColumn(col []string) []string {
 }
 
 func dynamicMix(col []string) []string{
-	
-	r,_,err := GetMatrixWith(dynkey[0],dynkey[1])
-	if(err){
+	if(g_err){
 		col= mixColumn(col)
 	} else {
 		a := make([]int, 4)
@@ -330,10 +325,10 @@ func dynamicMix(col []string) []string{
 			a[c] = int(t[0])
 		}
 		
-		col[0] = hex.EncodeToString([]byte{MulGF(r[0], a[0]).Byte_value ^ MulGF(r[1], a[1]).Byte_value ^ MulGF(r[2], a[2]).Byte_value ^ MulGF(r[3], a[3]).Byte_value})
-		col[1] = hex.EncodeToString([]byte{MulGF(r[3], a[0]).Byte_value ^ MulGF(r[0], a[1]).Byte_value ^ MulGF(r[1], a[2]).Byte_value ^ MulGF(r[2], a[3]).Byte_value})
-		col[2] = hex.EncodeToString([]byte{MulGF(r[2], a[0]).Byte_value ^ MulGF(r[3], a[1]).Byte_value ^ MulGF(r[0], a[2]).Byte_value ^ MulGF(r[1], a[3]).Byte_value})
-		col[3] = hex.EncodeToString([]byte{MulGF(r[1], a[0]).Byte_value ^ MulGF(r[2], a[1]).Byte_value ^ MulGF(r[3], a[2]).Byte_value ^ MulGF(r[0], a[3]).Byte_value})
+		col[0] = hex.EncodeToString([]byte{MulGF(g_r[0], a[0]).Byte_value ^ MulGF(g_r[1], a[1]).Byte_value ^ MulGF(g_r[2], a[2]).Byte_value ^ MulGF(g_r[3], a[3]).Byte_value})
+		col[1] = hex.EncodeToString([]byte{MulGF(g_r[3], a[0]).Byte_value ^ MulGF(g_r[0], a[1]).Byte_value ^ MulGF(g_r[1], a[2]).Byte_value ^ MulGF(g_r[2], a[3]).Byte_value})
+		col[2] = hex.EncodeToString([]byte{MulGF(g_r[2], a[0]).Byte_value ^ MulGF(g_r[3], a[1]).Byte_value ^ MulGF(g_r[0], a[2]).Byte_value ^ MulGF(g_r[1], a[3]).Byte_value})
+		col[3] = hex.EncodeToString([]byte{MulGF(g_r[1], a[0]).Byte_value ^ MulGF(g_r[2], a[1]).Byte_value ^ MulGF(g_r[3], a[2]).Byte_value ^ MulGF(g_r[0], a[3]).Byte_value})
 	}
 
 	return col
@@ -341,8 +336,7 @@ func dynamicMix(col []string) []string{
 
 func dynamicUnmix(col []string) []string{
 	
-	_,r,err := GetMatrixWith(dynkey[0],dynkey[1])
-	if(err){
+	if(g_err){
 		col = unmixColumn(col)
 	} else {
 		a := make([]int, 4)
@@ -351,10 +345,10 @@ func dynamicUnmix(col []string) []string{
 			a[c] = int(t[0])
 		}
 
-		col[0] = hex.EncodeToString([]byte{MulGF(r[0], a[0]).Byte_value ^ MulGF(r[1], a[1]).Byte_value ^ MulGF(r[2], a[2]).Byte_value ^ MulGF(r[3], a[3]).Byte_value})
-		col[1] = hex.EncodeToString([]byte{MulGF(r[3], a[0]).Byte_value ^ MulGF(r[0], a[1]).Byte_value ^ MulGF(r[1], a[2]).Byte_value ^ MulGF(r[2], a[3]).Byte_value})
-		col[2] = hex.EncodeToString([]byte{MulGF(r[2], a[0]).Byte_value ^ MulGF(r[3], a[1]).Byte_value ^ MulGF(r[0], a[2]).Byte_value ^ MulGF(r[1], a[3]).Byte_value})
-		col[3] = hex.EncodeToString([]byte{MulGF(r[1], a[0]).Byte_value ^ MulGF(r[2], a[1]).Byte_value ^ MulGF(r[3], a[2]).Byte_value ^ MulGF(r[0], a[3]).Byte_value})
+		col[0] = hex.EncodeToString([]byte{MulGF(g_ri[0], a[0]).Byte_value ^ MulGF(g_ri[1], a[1]).Byte_value ^ MulGF(g_ri[2], a[2]).Byte_value ^ MulGF(g_ri[3], a[3]).Byte_value})
+		col[1] = hex.EncodeToString([]byte{MulGF(g_ri[3], a[0]).Byte_value ^ MulGF(g_ri[0], a[1]).Byte_value ^ MulGF(g_ri[1], a[2]).Byte_value ^ MulGF(g_ri[2], a[3]).Byte_value})
+		col[2] = hex.EncodeToString([]byte{MulGF(g_ri[2], a[0]).Byte_value ^ MulGF(g_ri[3], a[1]).Byte_value ^ MulGF(g_ri[0], a[2]).Byte_value ^ MulGF(g_ri[1], a[3]).Byte_value})
+		col[3] = hex.EncodeToString([]byte{MulGF(g_ri[1], a[0]).Byte_value ^ MulGF(g_ri[2], a[1]).Byte_value ^ MulGF(g_ri[3], a[2]).Byte_value ^ MulGF(g_ri[0], a[3]).Byte_value})
 	}
 
 	return col
@@ -448,13 +442,13 @@ func Decrypt(hexString string, kind_ string, key string) string {
 	}
 	
 	str = addRoundKey(sub, keys, 0)	
-	
 	return HexDecode_(str)
 }
 
 func Encrypt(str string, kind_ string, key string) string {
 	kind = kind_
 	hexString := HexEncode(str)
+	
 	block := strTo4Blocks(hexString)
 
 	keys := KeySchedule(key)
