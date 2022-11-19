@@ -21,9 +21,9 @@ This implementation contain 3 mode of using RSA
 <h4>Default</h4>
 Is The same as RSA-ISO
 <h4>Special</h4>
-RSA using the our special polynom: x^3+x^2+4x+5
+RSA using our special polynom: x^3+x^2+4x+5
 <h4>Dynamic</h4>
 RSA using a generated Matrix based on the given publicKey
 It adds another tier of complexity to Rijndael Algorithm, and make the solving rely on this package....
 
-You can add some spices and get different result, if you intend to integrate it on your work... 
+You can add/change/mix some spices and get different result, if you intend to integrate it on your work... 
